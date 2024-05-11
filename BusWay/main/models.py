@@ -5,7 +5,7 @@ class Profile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=30)
-
+    number_phone = models.CharField(max_length=11, default="Empty")
 class Bus(models.Model):
     brand = models.CharField(max_length=100)
     total_seats = models.IntegerField()
@@ -19,6 +19,8 @@ class BusSeat(models.Model):
 class Route(models.Model):
     origin = models.CharField(max_length=30)
     destination = models.CharField(max_length=30)
+    origin_address = models.CharField(max_length=50, default='Empty')
+    destination_address = models.CharField(max_length=50, default='Empty')
     departure_time = models.DateTimeField()
     arrival_time = models.DateTimeField()
     duration = models.IntegerField()

@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/base_css.css' %}">
+    <link rel="icon" href="{% static 'images/logo.png' %}">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{% static 'images/logo.png' %}" alt="logo">
+            <p class="name">BusWay</p>
+        </div>
+        <div class="links">
+            {% if request.user.is_authenticated %}
+                <a class="profile_link" href="{% url 'main_page' %}">
+                    <img src="{% static 'images/profile_icon.png' %}" alt="profile">
+                    <p>Личный кабинет</p>
+                </a>
+
+                <a class="profile_link" href="{% url 'logout_func' %}">
+                    <p> / Выйти с аккаунта</p>
+                </a>
+                
+            {% else %}
+                <div class="auth_link">
+                    <a href="{% url 'main_page' %}">Авторизация/</a>
+                    <a href="{% url 'main_page' %}">Регистарция</a>
+                </div>
+            {% endif %}
+        </div>
+    </header>
+
+    {% block content %}
+
+    {% endblock %}
+
+    <footer>
+        <div class="info">
+            <p>Почта - BusWayKaz@gmail.com</p>
+        </div>
+        <div class="copyright">
+            <p>© 2024, OOO «БусВэй». Все права защищены. «BusWay» — Онлайн сервис бронирования билетов</p>
+        </div>
+    </footer>
+</body>
+</html>     
