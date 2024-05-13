@@ -56,7 +56,7 @@
     justify-content: center;
 }
 .search_block form{
-    width: 130vh;
+    width: 140vh;
     height: 10vh;
     background-color: white;
     border-radius: 1vh;
@@ -174,12 +174,12 @@
     margin-bottom: 50vh;
 }
 .spisok{
-    width: 100vh;
+    /* width: 100vh; */
 }
 .route_block{
     box-shadow: 3px 2px 6px #aeaeae;
-    width: 110vh;
-    height: 30vh;
+    width: 140vh;
+    /* height: 40vh; */
     border-radius: 2vh;
     margin-bottom: 5vh;
 
@@ -189,6 +189,7 @@
 .race_inf{
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-evenly;
 }
 .route_time_inf{
     width: 100%;
@@ -199,7 +200,7 @@
     /* gap: 26%; */
 }
 .departure_time{
-    font-size: 1.6vw;
+    font-size: 1.9vw;
     line-height: 0;
 }
 .duration{
@@ -211,7 +212,7 @@
     color: #969696;
 }
 .arrival_time{
-    font-size: 1.6vw;
+    font-size: 1.9vw;
     line-height: 0;
 }
 .date_inf {
@@ -232,15 +233,96 @@
     justify-content: space-around;
     align-items: center;
     gap: 10%;
-    line-height: 0;
+    /* line-height: 0; */
 }
 .distance{
     color: #969696;
 }
 .origin_address , .arrival_address{
     font-size: 1.6vw;
+    width: 10vh;
 }
 .address{
-    font-size: 1vw;
+    width: 15vh;
+    height: 7vh;
+    /* position: absolute; */
+    font-size: 0.8vw;
+    margin-top: -3vh;
+}
+.address p{
     
+}
+.brand_name{
+    
+}
+.bus_info{
+    /* width: 100vh; */
+    display: flex;
+    gap: 2vh;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+}
+.bus_info p{
+    font-size: 1.1vw;
+}
+.button{
+    padding: 3vh;
+}
+.button a{
+    padding: 3vh;
+    background-color: rgb(249, 37, 63);
+    color: white;
+    text-align: center;
+    border-radius: 2vh;
+    margin-top: 2vh;
+    text-decoration: none;
+    display: block;
+    width: 30vh;
+}
+.button a:focus{
+    background-color: rgb(161, 5, 23);
+}
+.line{
+    width: 39%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+}
+.square{
+    width: 2vh;
+    height: 2vh;
+    border-radius: 100%;
+    background-color: rgb(249, 37, 63);
+}
+.red_line{
+    width: 100%;
+    height: 0.5vh;
+    background-color: rgb(249, 37, 63);
+}
+.strela {
+    position: relative; /* Устанавливаем позиционирование */
+    display: inline-block; /* Размещаем элемент в строчной модели */
+    width: 2vh;/* Ширина стрелки */
+    height: 2vh; /* Высота стрелки */
+}
+
+.strela::after {
+    content: ''; /* Добавляем пустое содержимое */
+    position: absolute; /* Абсолютное позиционирование относительно родителя */
+    top: 50%; /* Располагаем по вертикали на 50% */
+    /* Располагаем справа от родительского элемента */
+    transform: translateY(-50%); /* Выравниваем по вертикали */
+    width: 0; /* Начальная ширина */
+    height: 0; /* Начальная высота */
+    border-top: 1vh solid transparent; /* Верхняя граница (стрелка) */
+    border-bottom: 1vh solid transparent; /* Нижняя граница (стрелка) */
+    border-left: 1vh solid rgb(249, 37, 63); /* Левая граница (стрелка) */
+}
+.block_check{
+    margin-bottom: 2vh;
+    width: 100%;
+}
+.available_seats p{
+    font-size: 1.3vw;
 }

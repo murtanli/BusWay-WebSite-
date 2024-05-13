@@ -4,32 +4,32 @@
 {% load custom_filters %}
 <head>
     <link rel="stylesheet" href="{% static 'css/main_page_css.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bus_routes_css.css' %}">
 </head>
 
 <div class="main_block">
     <div class="image_block">
         <img src="{% static 'images/bus-tour-01.jpg' %}" alt="">
         <div class="search_block_title">
-            <div class="title_text">
+            <div class="title_text_search">
                 <p>Билеты на автобус</p>
-                <p style="font-size: 1.2vw;">По России и Беларуси</p>
+                <h1>{{ departure }} - {{ arrival }}</h1>
             </div>
-            
         </div>
         <div class="search_block">
             <form action="{% url 'search_routes' %}" method="post">
                 {% csrf_token %}
                 <div class="departure">
                     <label for="departure">Откуда</label>
-                    <input type="text" name="departure" id="input_text" >
+                    <input type="text" name="departure" id="input_text" value="{{ departure }}">
                 </div>
                 <div class="arrival">
                     <label for="input_text">Куда</label>
-                    <input type="text" name="arrival" id="input_text" >
+                    <input type="text" name="arrival" id="input_text" value="{{ arrival }}">
                 </div>
                 <div class="date">
                     <label for="input_text">Дата поездки</label>
-                    <input class="date_text" type="date" name="date" id="input_text" >
+                    <input class="date_text" type="date" name="date" id="input_text" value="{{ date }}">
                 </div>
                 <div class="button_search">
                     <button type="submit"><p>Найти</p></button>
@@ -37,33 +37,9 @@
             </form>
         </div>
     </div>
-    <div class="content_block">
-        <div class="block_prew">
-            <div class="clock">
-                <img src="{% static 'images/clock.png' %}" alt="clock">
-                <h1>Без касс и очередей</h1>
-                <p>Билеты онлайн в любое время на сайте</p>
-            </div>    
-            <div class="road">
-                <img src="{% static 'images/road.png' %}" alt="road">
-                <h1>Более 100 направлений</h1>
-                <p>Более 100 направлений в день доступной на сайте</p>
-            </div>   
-            <div class="card">
-                <img src="{% static 'images/card.png' %}" alt="card">
-                <h1>Удобная оплата</h1>
-                <p>Бронируйте билеты на сайте и оплачивайте у автобуса</p>
-            </div>
-            <div class="ticket">
-                <img src="{% static 'images/ticket.png' %}" alt="ticket">
-                <h1>Отмена брони</h1>
-                <p>Поменяйте место если передумаете !</p>
-            </div>  
-        </div>
-    </div>
     <div class="schedule">
         <div class="schedule_title">
-            <h1>Расписание рейсов на сегодня {{ today }}</h1>
+            <h1>Расписание рейсов {{ departure }} - {{ arrival }} на {{ formatted_date }}</h1>
         </div>
         <div class="schedule_races">
             {% if routes %}
@@ -130,20 +106,28 @@
                                             <div class="price">
                                                 <p>Цена - {{ route.schedule.price|spacecomma }} руб</p>
                                             </div>
-                                        
+                    
+                                            
                                         </div>
                                     </div>
+                                    
                                 </div>
                                 <div class="button">
                                     <a href="{% url 'bus_layout' route.schedule.id %}">Выбрать</a>
                                 </div>
+                                
                             </div>
                         </div>
                     {% endfor %}
                 </div>
             {% else %}
                 <div class="empty">
-                    <h1>Рейсов на сегодня нет</h1>
+                    <img src="{% static 'images/search-empty.png' %}" alt="">
+                    <div class="title_text_block_empty">
+                        <h1>Билеты не найдены</h1>
+                        <p>К сожалению, такого маршрута у нас нет. Мы делаем всё возможное, чтобы подключать как можно больше маршрутов. Возможно, он скоро появится.</p>
+                    </div>
+                    
                 </div>
             {% endif %}
         </div>
@@ -162,10 +146,16 @@
         const defaultDate = getCurrentDate(); // Получаем текущую дату в формате "ГГГГ-ММ-ДД"
         console.log(departureInput.value);
         // Устанавливаем начальные значения полей
+        if (departureInput.value == null) {
+            departureInput.value = defaultDeparture;
+        }
+        if (arrivalInput.value == null) {
+            arrivalInput.value = defaultArrival;
+        }
+        if (dateInput.value == null) {
+            dateInput.value = defaultDate;
+        }
         
-        departureInput.value = defaultDeparture;
-        arrivalInput.value = defaultArrival;
-        dateInput.value = defaultDate;
 
         // Добавляем обработчики событий для поля "Откуда"
         departureInput.addEventListener('focus', function() {
@@ -216,5 +206,6 @@
         }
     });
 </script>
+
 
 {% endblock %}

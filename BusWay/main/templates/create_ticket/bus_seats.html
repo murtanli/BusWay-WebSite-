@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% load custom_filters %}
+
+<head>
+    <link rel="stylesheet" href="{% static 'css/bus_seats_css.css' %}">
+</head>
+<div class="header_block">
+    <div class="title_header_block">
+        <h1>Выбор места</h1>
+        <p>{{ schedule.route.destination }} - {{ schedule.route.origin }}</p>
+        <p style="margin-top: 25vh; font-size: 0.9vw; margin-left:-34.7vh;">{{ schedule.route.departure_time }}</p>
+    </div>
+</div>
+<div class="bus_block">
+    <div class="bus_layout">
+        <div class="bus_layout_title">
+            <h1>Выберите место на схеме автобуса</h1>
+            <div class="bus_layout_text">
+                <p style="color: rgb(138, 138, 138);">Автобус: </p><p>{{ bus.brand }} ({{bus.total_seats}})</p>
+            </div>
+        </div>
+        <div class="exemple_block">
+            <div class="free_block">
+                <div class="square_free"></div>
+                <p>- свободное</p>
+            </div>
+            <div class="busy_block">
+                <div class="square_busy"></div>
+                <p>- занятое</p>
+            </div>
+        </div>
+        <div class="choose_seate_block">
+            <div class="bus_seates_block">
+                <div class="steering-wheel">
+                    <img src="{% static 'images/steering-wheel.png' %}" alt="">
+                </div>
+                <form class="seates_place_block">
+                    <div class="row">
+                        {% for col in column_one %}
+                            {% if col.is_occuiped == True %}
+                                <div class="seat_occuiped" id="{{ col.seat_number}}">
+                                    <p>{{col.seat_number}}</p>
+                                </div>
+                            {% else %}
+                                <div class="seat_free" id="{{ col.seat_number}}">
+                                    <input type="checkbox" name="is_occuiped" id=""value="{{col.seat_number}}">
+                                    <p>{{col.seat_number}}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="row">
+                        {% for col in column_two %}
+                            {% if col.is_occuiped == True %}
+                                <div class="seat_occuiped" id="{{ col.seat_number}}">
+                                    <p>{{col.seat_number}}</p>
+                                </div>
+                            {% else %}
+                                <div class="seat_free" id="{{ col.seat_number}}">
+                                    <input type="checkbox" name="is_occuiped" id=""value="{{col.seat_number}}">
+                                    <p>{{col.seat_number}}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div  style="height: 5vh;"></div>
+                    <div class="row">
+                        {% for col in column_three %}
+                            {% if col.is_occuiped == True %}
+                                <div class="seat_occuiped" id="{{ col.seat_number}}">
+                                    <p>{{col.seat_number}}</p>
+                                </div>
+                            {% else %}
+                                <div class="seat_free" id="{{ col.seat_number}}">
+                                    <input type="checkbox" name="is_occuiped" id=""value="{{col.seat_number}}">
+                                    <p>{{col.seat_number}}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="row">
+                        {% for col in column_four %}
+                                {% if col.is_occuiped == True %}
+                                <div class="seat_occuiped" id="{{ col.seat_number}}">
+                                    <p>{{col.seat_number}}</p>
+                                </div>
+                            {% else %}
+                                <div class="seat_free" id="{{ col.seat_number}}">
+                                    <input type="checkbox" name="is_occuiped" id=""value="{{col.seat_number}}">
+                                    <p>{{col.seat_number}}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>                    
+                </а>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+.empty{
+    width: 65%;
+    display: flex;
+}
+
+.empty img{
+    width: 20vh;
+    height: 17vh;
+}
+.title_text_block_empty{
+    margin-left: 5vh;
+    width: 100%;
+    margin-top: -1vh;
+}
+.title_text_block_empty h1{
+    font-weight: 500;
+}
+.title_text_block_empty p{
+    font-family: Inter;
+    font-size: 1.3vw;
+    line-height: 1.5;
+}
+
+.title_text_search{
+    color: rgb(236, 236, 236);
+    font-family: Inter;
+    margin-top: -2vh;
+    margin-right: 30vh;
+    width: 100vh;
+    line-height: 0.4;
+}
+.title_text_search p{
+    font-size: 1.4vw;
+}
+.title_text_search h1{
+    font-size: 2.5vw;
+}
+
+.image_block {
+    height: 60vh;
+}
+.search_block{
+    margin-top: 40vh;
+}
