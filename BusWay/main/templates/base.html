@@ -17,7 +17,7 @@
         <div class="links">
             {% if request.user.is_authenticated %}
                 <a class="profile_link" href="{% url 'main_page' %}">
-                    {% if title == 'Выбор места' %}
+                    {% if title == 'Выбор места' or title == 'Оформление билета' %}
                         <img src="{% static 'images/profile_icon_green.png' %}" alt="profile">
                     {% else %}
                         <img src="{% static 'images/profile_icon.png' %}" alt="profile">
@@ -31,12 +31,81 @@
                 
             {% else %}
                 <div class="auth_link">
-                    <a href="{% url 'main_page' %}">Авторизация/</a>
-                    <a href="{% url 'main_page' %}">Регистарция</a>
+                    <a id="auth">Авторизация/</a>
+                    <a id="sign_in">Регистарция</a>
                 </div>
             {% endif %}
         </div>
     </header>
+
+    <div id="block_auth" class="auth_block_none">
+        <div class="auth_form">
+            <div class="auth_form_title">
+                <h1>Авторизация</h1>
+                <div class="but_exit">x</div>
+            </div>
+            <form method="post" action="{% url 'auth' %}" class="inputs_container"  onsubmit="return validateForm(this)">
+                {% csrf_token %}
+                <div class="login input_block_auth">
+                    <label for="login">Логин</label>
+                    <input id="login" type="text" name="login">
+                </div>
+                <div class="password input_block_auth">
+                    <label for="password">Пароль</label>
+                    <input id="password" type="password" name="password">
+                </div>
+                <div class="button_submit">
+                    <button id="auth_button" type="submit">Войти</button>
+                </div>
+            </form>
+            <div class="auth_form_links">
+                <div class="no_acc">
+                    <a id="link_sign_in">Нет аккаунта ? Регистрация</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if messages %}
+        <div class="message_block">
+            <div class="message">
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                <div class="close_message">
+                    <button onclick="closeMessageBlock()">закрыть</button>
+                </div>
+            </div>
+        </div>
+        
+    {% endif %}
+    <div id="block_sign_in" class="auth_block_none">
+        <div  class="auth_form">
+            <div class="auth_form_title">
+                <h1>Авторизация</h1>
+                <div class="but_exit">x</div>
+            </div>
+            <form  id="block_sign_in"  method="post" action="{% url 'sign_up' %}" class="inputs_container"  onsubmit="return validateForm(this)">
+                {% csrf_token %}
+                <div class="login input_block_auth">
+                    <label for="login">Логин</label>
+                    <input type="text" name="login">
+                </div>
+                <div class="password input_block_auth">
+                    <label for="password">Пароль</label>
+                    <input type="password" name="password">
+                </div>
+                <div class="repeat_password input_block_auth">
+                    <label for="password">Повторите пароль</label>
+                    <input type="password" name="repeat_password">
+                </div>
+                <div class="button_submit">
+                    <button id="sign_in_button" type="submit">Регистрация</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     {% block content %}
 
@@ -48,7 +117,75 @@
         </div>
         <div class="copyright">
             <p>© 2024, OOO «БусВэй». Все права защищены. «BusWay» — Онлайн сервис бронирования билетов</p>
-        </div>
-    </footer>
+        </div>    </footer>
 </body>
-</html>     
+</html>    
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        var auth = document.querySelector('#auth');
+        var sign_in = document.querySelector('#sign_in');
+        var block_auth = document.querySelector('#block_auth');
+        var but_exit = block_auth.querySelector('.but_exit');
+        var link_sign_in = block_auth.querySelector('#link_sign_in')
+
+        var block_sign_in = document.querySelector('#block_sign_in');
+        var but_exit_sign_in = block_sign_in.querySelector('.but_exit');
+        sign_in.addEventListener('click', (event) => {
+            block_sign_in.classList.add('auth_block')
+            block_sign_in.classList.remove('auth_block_none')
+        })
+        but_exit_sign_in.addEventListener('click', (event) => {
+            block_sign_in.classList.remove('auth_block')
+            block_sign_in.classList.add('auth_block_none')
+        })
+
+        link_sign_in.addEventListener('click', (event) => {
+            block_auth.classList.remove('auth_block')
+            block_auth.classList.add('auth_block_none')
+
+            block_sign_in.classList.add('auth_block')
+            block_sign_in.classList.remove('auth_block_none')
+        })
+        auth.addEventListener('click', (event) => {
+            block_auth.classList.add('auth_block')
+            block_auth.classList.remove('auth_block_none')
+        })
+        but_exit.addEventListener('click', (event) => {
+            block_auth.classList.remove('auth_block')
+            block_auth.classList.add('auth_block_none')
+        })
+    });
+    function validateForm(form) {
+        var login = form.querySelector('input[name="login"]');
+        var password = form.querySelector('input[name="password"]');
+        var repeatPassword = form.querySelector('input[name="repeat_password"]');
+
+        if (login.value.trim() === '' || password.value.trim() === '') {
+            alert('Поля не должны быть пустыми!');
+            return false;
+        }
+
+        if (form.id === 'block_sign_in') {
+            if (password.value !== repeatPassword.value) {
+                alert('Пароли не совпадают!');
+                return false;
+            }else if(password.value.length < 8) {
+                alert('Пароль должен иметь больше 8 символов !');
+                return false;
+            } 
+
+        }
+
+        console.log('Логин: ' + login.value);
+        console.log('Пароль: ' + password.value);
+
+        
+        return true;
+    }
+    function closeMessageBlock() {
+        var mesBlock = document.querySelector('.message_block');
+        mesBlock.classList.remove('message_block');
+        mesBlock.classList.add('message_block_none');
+    }
+    
+</script> 

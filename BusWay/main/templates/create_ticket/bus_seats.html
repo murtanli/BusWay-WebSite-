@@ -9,11 +9,11 @@
 <div class="header_block">
     <div class="title_header_block">
         <h1>Выбор места</h1>
-        <p>{{ schedule.route.destination }} - {{ schedule.route.origin }}</p>
+        <p>{{ schedule.route.origin }} - {{ schedule.route.destination }}</p>
         <p style="margin-top: 25vh; font-size: 0.9vw; margin-left:-34.7vh;">{{ schedule.route.departure_time }}</p>
     </div>
 </div>
-<div class="bus_block">
+<form class="bus_block" onsubmit="return check()" method="post" action="{% url 'create_ticket' %}">
     <div class="bus_layout">
         <div class="bus_layout_title">
             <h1>Выберите место на схеме автобуса</h1>
@@ -36,7 +36,9 @@
                 <div class="steering-wheel">
                     <img src="{% static 'images/steering-wheel.png' %}" alt="">
                 </div>
-                <form class="seates_place_block">
+                <div class="seates_place_block">
+                    {% csrf_token %}
+                    <input style="display: none;" type="text" name="schedule_id" id="input_block" value="{{ schedule.id }}" readonly>
                     <div class="row">
                         {% for col in column_one %}
                             {% if col.is_occuiped == True %}
@@ -44,8 +46,8 @@
                                     <p>{{col.seat_number}}</p>
                                 </div>
                             {% else %}
-                                <div class="seat_free" id="{{ col.seat_number}}">
-                                    <input type="checkbox" name="is_occuiped" id=""value="{{col.seat_number}}">
+                                <div data-seat-number="{{ col.seat_number}}" class="seat_free" id="{{ col.seat_number}}">
+                                    <input type="checkbox" id="input_block" value="{{col.seat_number}}">
                                     <p>{{col.seat_number}}</p>
                                 </div>
                             {% endif %}
@@ -58,8 +60,8 @@
                                     <p>{{col.seat_number}}</p>
                                 </div>
                             {% else %}
-                                <div class="seat_free" id="{{ col.seat_number}}">
-                                    <input type="checkbox" name="is_occuiped" id=""value="{{col.seat_number}}">
+                                <div data-seat-number="{{ col.seat_number}}" class="seat_free" id="{{ col.seat_number}}">
+                                    <input type="checkbox" id="input_block" value="{{col.seat_number}}">
                                     <p>{{col.seat_number}}</p>
                                 </div>
                             {% endif %}
@@ -73,8 +75,8 @@
                                     <p>{{col.seat_number}}</p>
                                 </div>
                             {% else %}
-                                <div class="seat_free" id="{{ col.seat_number}}">
-                                    <input type="checkbox" name="is_occuiped" id=""value="{{col.seat_number}}">
+                                <div data-seat-number="{{ col.seat_number}}" class="seat_free" id="{{ col.seat_number}}">
+                                    <input type="checkbox" id="input_block" value="{{col.seat_number}}">
                                     <p>{{col.seat_number}}</p>
                                 </div>
                             {% endif %}
@@ -87,16 +89,81 @@
                                     <p>{{col.seat_number}}</p>
                                 </div>
                             {% else %}
-                                <div class="seat_free" id="{{ col.seat_number}}">
-                                    <input type="checkbox" name="is_occuiped" id=""value="{{col.seat_number}}">
+                                <div data-seat-number="{{ col.seat_number}}" class="seat_free" id="{{ col.seat_number}}">
+                                    <input type="checkbox" id="input_block" value="{{col.seat_number}}">
                                     <p>{{col.seat_number}}</p>
                                 </div>
                             {% endif %}
                         {% endfor %}
-                    </div>                    
-                </а>
+                    </div>                   
+                </div>
             </div>
         </div>
+        <div class="button_save_seat">
+            {% if request.user.is_authenticated %}
+                <button type="submit">Продолжить</button>
+            {% else %}
+                <button type="submit" style="background-color: rgb(161, 5, 23);" disabled>Зарегестрируйтесь !</button>
+            {% endif %}
+        </div>
     </div>
-</div>
+</form>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const selectedSeats = new Set(); // Множество для отслеживания выбранных мест
+        var seat_num = [];
+
+        const seatBlocks = document.querySelectorAll('.seat_free');
+
+        seatBlocks.forEach(block => {
+            block.addEventListener('click', (event) => {
+                event.preventDefault(); // Отменяем действие по умолчанию (например, переход по ссылке)
+                
+                const seatNumber = block.dataset.seatNumber; // Получаем номер места из атрибута data-seat-number
+                const inputBlock = block.querySelector('input');
+                if (selectedSeats.has(seatNumber)) {
+                    // Место уже выбрано, поэтому снимаем выбор
+                    selectedSeats.delete(seatNumber);
+                    block.classList.remove('seat_selected');
+                    console.log('Отменено выбрано место: ' + seatNumber);
+                    inputBlock.name = '';
+                    // Удаляем место из массива seat_num
+                    const index = seat_num.indexOf(seatNumber);
+                    if (index !== -1) {
+                        seat_num.splice(index, 1);
+                    }
+                    seat_num = []
+                } else {
+                    // Проверяем, можно ли выбрать место (должно быть выбрано только одно место)
+                    if (selectedSeats.size === 0) {
+                        selectedSeats.add(seatNumber);
+                        block.classList.add('seat_selected');
+    
+                        // Находим вложенный input и устанавливаем его атрибуты
+                       
+                        inputBlock.checked = true;
+                        inputBlock.name = 'selected_seat';
+                        console.log('Выбрано место: ' + seatNumber);
+                    } else {
+                        alert('Достигнуто максимальное количество выбраннх мест');
+                    }
+                }
+                console.log(seat_num);
+            });
+        });
+    
+    });
+    function check() {
+        const seat_num = document.querySelectorAll('.seat_selected').length;
+        if (seat_num === 0) {
+            alert('Выберите место!');
+            return false; // Отменяем отправку формы
+        }
+        return true; // Разрешаем отправку формы
+    }
+</script>
+
+
+
+
 {% endblock %}

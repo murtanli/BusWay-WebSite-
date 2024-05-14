@@ -1,0 +1,16 @@
+@font-face {
+    font-family: Inter;
+    src: url(../fonts/Inter/Inter-VariableFont_slnt\,wght.ttf)
+}
+
+.error h1{
+    font-family: Inter;
+    text-align: center;
+    font-size: 1.4vw;
+}
+.error {
+    height: 100vh;
+}
+.title{
+    margin-top: 100vh;
+}

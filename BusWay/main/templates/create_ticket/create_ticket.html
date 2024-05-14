@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% load custom_filters %}
+
+<head>
+    <link rel="stylesheet" href="{% static 'css/create_ticket_css.css' %}">
+</head>
+<div class="header_block">
+    <div class="title_header_block">
+        <h1>Выбор места</h1>
+        <p>{{ schedule.route.origin }} - {{ schedule.route.destination }}</p>
+        <p style="margin-top: 25vh; font-size: 0.9vw; margin-left:-34.7vh;">{{ schedule.route.departure_time }}</p>
+    </div>
+</div>
+<div class="add_info">
+    <div class="user_form">
+        <form class="user_form_content" onsubmit="return check()" action="{% url 'save_ticket' %}" method="post">
+            {% csrf_token %}
+            <input style="display: none;" type="text" name="schedule_id" value="{{ schedule.id }}">
+            <input style="display: none;" type="text" name="seat_number" value="{{ seat_number  }}">
+            <div class="title_user_form">
+                <h1>Оформление билета</h1>
+            </div>
+            <div class="text_user_form">
+                <p>Указанные данные необходимы для совершения бронирования и будут проверены при посадке в автобус.</p>
+            </div>
+            <div>
+                <div class="user_form_form">
+                    <div class="input_block">
+                        <label for="last_name">Фамилия</label>
+                        <input id="last_name" type="text" name="last_name" placeholder="Иванов">
+                    </div>
+                    <div class="input_block">
+                        <label for="first_name">Имя</label>
+                        <input id="first_name" type="text" name="first_name" placeholder="Иван">
+                    </div>
+                    <div class="input_block">
+                        <label for="date_of_birthday">Дата рождения</label>
+                        <input id="date_of_birthday" type="date" name="date_of_birthday" placeholder="дд.мм.гггг">
+                    </div>
+                    <div class="input_block">
+                        <label for="number_phone">Номер телефона</label>
+                        <input  id="num_phone" type="tel" name="number_phone" placeholder=" 7 ___ ___-__-__">
+                        <span class="plus">+</span>
+                    </div>
+                    <div class="input_block">
+                        <label for="email">E-mail</label>
+                        <input id="email" type="email" name="email" placeholder="example@mail.ru">
+                    </div>
+                   
+                </div> 
+                <div class="seat_number_block">
+                    <h1>Место в автобусе</h1>
+                    <div class="seat_number_view">
+                        <img src="{% static 'images/seat.png' %}" alt="">
+                        <p> Место: {{ seat_number }}</p>
+                    </div>
+                </div>
+                <div class="save_button_block">
+                    <button type="submit">Сохранить</button>
+                </div>
+                
+            </div>
+        </form>
+    </div>
+    <div class="price_block">
+        <div class="price_info_block">
+            <div class="title_price_block">
+                <h1>О рейсе</h1>
+            </div>
+            <hr>
+            <div class="race_info">
+                <div class="departure">
+                    <div class="datetime_departure_block">
+                        <h1>{{ route.departure_time|time }}</h1>
+                        <div>
+                            <p>{{ route.departure_time.day }} {{ route.departure_time|date:"F" }}</p>
+                        </div>
+                    </div>
+                    <div class="departure_place">
+                        <div class="departure_city">
+                            <p>{{ route.origin }}</p>
+                        </div>
+                        <div class="departure_address">
+                            <p>{{ route.origin_address }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="line_block">
+                   <div class="circle"></div> 
+                   <div class="line"></div>
+                   <div style="margin-top: -1vh;" class="circle"></div> 
+                </div>
+                <div class="arrival">
+                    <div class="datetime_arrival_block">
+                        <h1>{{ route.arrival_time|time }}</h1>
+                        <div>
+                            <p>{{ route.arrival_time.day }} {{ route.arrival_time|date:"F" }}</p>
+                        </div>
+                    </div>
+                    <div class="arrival_place">
+                        <div class="arrival_city">
+                            <p>{{ route.destination }}</p>
+                        </div>
+                        <div class="arrival_address">
+                            <p>{{ route.destination_address }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="price">
+                <div class="price_text">
+                    <p>Цена:</p>
+                    <p>{{ schedule.price|spacecomma }} руб</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        var num_phone_input = document.querySelector('#num_phone');
+        var plus = document.querySelector('.plus');
+
+        num_phone_input.addEventListener('focus', (event) => {
+            // Удаляем класс '.plus' у элемента plus
+            plus.classList.remove('plus');
+            plus.classList.add('plus_rem');
+            // Устанавливаем значение поля ввода на "+7", когда фокус получен
+            num_phone_input.value = "+7";
+        });
+
+        num_phone_input.addEventListener('blur', (event) => {
+            // Добавляем класс '.plus' обратно элементу plus, если поле ввода теряет фокус
+            plus.classList.add('plus');
+            plus.classList.remove('plus_rem');
+            // Если поле ввода пустое, возвращаем его к исходному значению "+7"
+            if (num_phone_input.value.trim() === "") {
+                num_phone_input.value = "";
+                num_phone_input.placeholder = " 7 ___ ___-__-__"
+            }
+        });
+    });
+    function check() {
+        const form = document.querySelector('.user_form_form');
+        const last_name = form.querySelector('#last_name');
+        const first_name = form.querySelector('#first_name');
+        const date_of_birthday = form.querySelector('#date_of_birthday');
+        const number_phone = form.querySelector('#number_phone');
+        const email = form.querySelector('#email');
+    
+        if (last_name.value === "" || first_name.value === "" || date_of_birthday.value === "" || number_phone.value === "" || email.value === "") {
+            alert('Заполните все поля!');
+            return false; // Отменяем отправку формы
+        }
+    
+        return true; // Разрешаем отправку формы
+    }
+    
+</script>
+
+{% endblock %}

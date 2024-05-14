@@ -3,9 +3,11 @@ from django.db import models
 
 class Profile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=30)
+    first_name = models.CharField(max_length=20, null=True, blank=True)
+    last_name = models.CharField(max_length=30 , null=True, blank=True)
+    email = models.EmailField(max_length=30, default="Empty")
     number_phone = models.CharField(max_length=11, default="Empty")
+    date_of_birthday = models.DateField(null=True, blank=True)
 class Bus(models.Model):
     brand = models.CharField(max_length=100)
     total_seats = models.IntegerField()

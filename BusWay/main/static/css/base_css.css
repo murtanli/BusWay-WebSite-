@@ -71,6 +71,7 @@ header{
     font-weight: 500;
     color: white;
     font-family: Roboto, Helvetica Neue, Helvetica, Arial, sans-serif;
+    cursor: pointer;
 }
 
 
@@ -95,3 +96,159 @@ footer .copyright{
     color: white;
 }
 
+
+
+.auth_block_none{
+    display: none;
+    
+}
+.auth_block{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.auth_form{
+    width: 50vh;
+    height: 70vh;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-radius: 2vh;
+}
+.auth_block h1{
+    font-family: Inter;
+    font-size: 2vw;
+    font-weight: 500;
+}
+.inputs_container{
+    margin-top: -20vh;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: center;
+    gap: 4vh;
+}
+.input_block_auth{
+    display: flex;
+    width: 38vh;
+    flex-wrap: wrap;
+   
+}
+.input_block_auth input{
+    width: 38vh;
+    height: 6vh;
+    border-radius: 1vh;
+    border: solid 0.1vh rgb(156, 156, 156);
+}
+.input_block_auth input{
+    outline: none;
+    box-shadow: 0 0px 3px rgba(0, 0, 0, 0.5);
+}
+.input_block_auth input[type="text"], input[type="password"]{
+    font-family: Inter;
+    font-size: 1.1vw;
+    padding-left: 1vh;
+}
+.input_block_auth label{
+    font-family: Inter;
+    font-size: 1.2vw;
+    color: rgb(41, 41, 41);
+}
+.button_submit{
+    width: 10;
+    display: flex;
+    justify-content: center;
+}
+.button_submit button{
+    width: 25vh;
+    height: 6vh;
+    border: none;
+    background-color: rgb(249, 37, 63);
+    border-radius: 1vh;
+    color: white;
+    font-family: Inter;
+    font-size: 1.2vw;
+    transition:  0.4s ease;
+}
+.button_submit button:hover{
+    background-color: rgb(182, 6, 27);
+}
+.no_acc a{
+    text-decoration: none;
+    color: black;
+    font-family: Inter;
+    font-size: 1.2vw;
+    transition:  0.4s ease;
+    cursor: pointer;
+}
+.no_acc a:hover{
+    color: rgb(146, 10, 10);
+}
+
+.but_exit{
+    font-family: Inter;
+    font-size: 1.8vw;
+    position: absolute;
+    margin-top: -10vh;
+    margin-left: 33vh;
+    cursor: pointer;
+}
+
+.message_block_none{
+    display: none;
+}
+.message_block{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+}
+.close_message button{
+    font-family: Inter;
+    font-size: 1.2vw;
+    width: 25vh;
+    height: 6vh;
+    color: white;
+    border: none;
+    background-color: rgb(249, 37, 63);
+    transition:  0.4s ease;
+    border-radius: 2vh;
+}
+.close_message button:hover{
+    background-color: rgb(182, 6, 27);
+}
+.close_message {
+    margin-bottom: 10vh;
+}
+.message{
+    display: flex;
+    width: 50vh;
+    background-color: white;
+    border-radius: 2vh;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.messages{
+    padding: 5vh;
+}
+.messages li{
+    font-family: Inter;
+    font-size: 1vw;
+    font-weight: 400;
+    color: red;
+}

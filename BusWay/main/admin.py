@@ -3,7 +3,7 @@ from .models import *
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'number_phone', 'first_name', 'last_name', 'user_login')
+    list_display = ('pk','first_name', 'last_name', 'email', 'date_of_birthday', 'number_phone', 'user_login')
     list_display_links = ('user_login',)
 
     def user_login(self, obj):

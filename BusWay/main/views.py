@@ -2,8 +2,10 @@ import calendar
 import datetime
 import locale
 from datetime import datetime
-from django.contrib.auth import logout
-from django.http import HttpResponse
+
+from django.contrib import messages
+from django.contrib.auth import logout, authenticate, login
+from django.http import HttpResponse, Http404, HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
@@ -116,7 +118,7 @@ def bus_layout(request, schedule_id):
     # Распределяем номера мест по столбцам
     for index, seat in enumerate(bus_seats):
         if index % 4 == 0:
-            seat_num = BusSeat.objects.get(bus=bus,seat_number=seat.seat_number)
+            seat_num = BusSeat.objects.get(bus=bus, seat_number=seat.seat_number)
             column_one.append(seat_num)
         elif index % 4 == 1:
             seat_num = BusSeat.objects.get(bus=bus, seat_number=seat.seat_number)
@@ -139,3 +141,99 @@ def bus_layout(request, schedule_id):
     }
 
     return render(request, "create_ticket/bus_seats.html", context=context)
+
+
+def create_ticket(request):
+    title = 'Оформление билета'
+
+    if request.method == 'POST':
+        schedule_id = request.POST.get('schedule_id')
+        seat_number = request.POST.get('selected_seat')
+
+        schedule = Schedule.objects.get(id=schedule_id)
+        route = schedule.route
+        context = {
+            'title': title,
+            'schedule': schedule,
+            'route': route,
+            'seat_number': seat_number,
+        }
+        return render(request, 'create_ticket/create_ticket.html', context=context)
+
+    return HttpResponseNotFound(render(request, 'notfound.html'))
+
+
+def save_ticket(request):
+    if request.method == 'POST':
+        schedule_id = request.POST.get('schedule_id')
+        seat_number = request.POST.get('seat_number')
+
+        last_name = request.POST.get('last_name')
+        first_name = request.POST.get('first_name')
+        date_of_birthday = request.POST.get('date_of_birthday')
+        number_phone = request.POST.get('number_phone')
+        email = request.POST.get('email')
+
+        user = get_object_or_404(User, id=request.user.id)
+        profile = get_object_or_404(Profile, user_id=user.id)
+
+        profile.first_name = first_name
+        profile.last_name = last_name
+        profile.date_of_birthday = date_of_birthday
+        profile.number_phone = number_phone
+        profile.email = email
+        profile.save()
+
+        schedule = Schedule.objects.get(id=schedule_id)
+        avalible_seats = schedule.available_seats
+        schedule.available_seats = avalible_seats - 1
+        schedule.save()
+
+        seat_number = BusSeat.objects.get(bus=schedule.bus, seat_number=seat_number)
+        seat_number.is_occuiped = True
+        seat_number.save()
+
+        Ticket.objects.create(
+            profile=profile,
+            schedule=schedule,
+            sel_seat=seat_number,
+            ticket_status='Забронировано'
+        )
+
+        return redirect('main_page')
+    return HttpResponseNotFound(render(request, 'notfound.html'))
+
+
+def auth(request):
+    if request.method == 'POST':
+        login_text = request.POST.get('login')
+        password_text = request.POST.get('password')
+
+        user = authenticate(username=login_text, password=password_text)
+
+        if user is not None:
+            login(request, user)
+            messages.success(request, 'Авторизация прошла успешно!')
+            return redirect('main_page')
+        else:
+            messages.error(request, 'Ошибка авторизации, неправильно введен пароль либо логин')
+            return redirect('main_page')
+
+
+def sign_up(request):
+    message = ""
+    if request.method == 'POST':
+        login_text = request.POST.get('login')
+        password_text = request.POST.get('password')
+
+
+        try:
+            user = User.objects.create_user(username=login_text, password=password_text)
+            messages.success(request, 'Регистрация прошла успешно!')
+        except:
+            messages.error(request, 'Ошибка регистрации. Пользователь с таким логином уже существует или произошла ошибка при заполнении формы.')
+
+
+        return redirect('main_page')
+    else:
+        return redirect('main_page')
