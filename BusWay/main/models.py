@@ -5,8 +5,8 @@ class Profile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=20, null=True, blank=True)
     last_name = models.CharField(max_length=30 , null=True, blank=True)
-    email = models.EmailField(max_length=30, default="Empty")
-    number_phone = models.CharField(max_length=11, default="Empty")
+    email = models.EmailField(max_length=30, default="Empty", null=True, blank=True)
+    number_phone = models.CharField(max_length=11, default="Empty", null=True, blank=True)
     date_of_birthday = models.DateField(null=True, blank=True)
 class Bus(models.Model):
     brand = models.CharField(max_length=100)

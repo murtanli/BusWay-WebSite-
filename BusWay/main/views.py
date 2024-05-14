@@ -226,14 +226,59 @@ def sign_up(request):
         login_text = request.POST.get('login')
         password_text = request.POST.get('password')
 
-
         try:
             user = User.objects.create_user(username=login_text, password=password_text)
+            profile = Profile.objects.create(user_id=user)
+            profile.save()
             messages.success(request, 'Регистрация прошла успешно!')
         except:
-            messages.error(request, 'Ошибка регистрации. Пользователь с таким логином уже существует или произошла ошибка при заполнении формы.')
-
+            messages.error(request,
+                           'Ошибка регистрации. Пользователь с таким логином уже существует или произошла ошибка при заполнении формы.')
 
         return redirect('main_page')
     else:
         return redirect('main_page')
+
+
+def profile_view(request):
+    if request.user.is_authenticated:
+        user = request.user
+        profile = Profile.objects.get(user_id=request.user)
+        tickets = Ticket.objects.filter(profile=profile)
+
+        title_name = 'Профиль'
+        locale.setlocale(locale.LC_ALL, 'Russian_Russia.utf8')
+        today = datetime.today()
+        formatted_date = today.strftime('%d %B %Y')
+
+        today = timezone.now()
+
+        context = {
+            'title': title_name,
+            'user': user,
+            'profile': profile,
+            'tickets': tickets,
+            'today': formatted_date
+        }
+
+        return render(request, 'profile_page/profile.html', context=context)
+
+    return HttpResponseNotFound(render(request, 'notfound.html'))
+
+def delete_ticket(request, ticket_id):
+    ticket = Ticket.objects.get(id=ticket_id)
+
+    seat = BusSeat.objects.get(id=ticket.sel_seat.id)
+    seat.is_occuiped = False
+    seat.save()
+
+    schedule = Schedule.objects.get(id=ticket.schedule.id)
+    av_seats = schedule.available_seats
+    schedule.available_seats = av_seats + 1
+    schedule.save()
+
+    ticket.delete()
+
+    return redirect('profile_view')
+
+

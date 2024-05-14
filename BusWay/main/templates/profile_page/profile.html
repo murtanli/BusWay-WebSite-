@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% load custom_filters %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/profile_css.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bus_routes_css.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main_page_css.css' %}">
+</head>
+<div class="block_profile_info">
+    <div class="blocks_info">
+        <div class="name_block">
+            <p>Имя: {{ profile.first_name }}</p>
+        </div>
+        <div class="last_name_block">
+            <p>Фамилия: {{ profile.last_name }}</p>
+        </div>
+        <div class="email_block">
+            <p>Email: {{ profile.email }}</p>
+        </div>
+        <div class="number_phone_block">
+            <p>Номер телефона: {{ profile.number_phone }}</p>
+        </div>
+        <div class="date_of_birthday_block">
+            <p>Дата рождения: {{ profile.date_of_birthday }}</p>
+        </div>
+    </div>
+</div>
+<div class="tickets">
+    <div class="tickets_block_info">
+        {% if not tickets %}
+            <div class="title_tickets">
+                <div style=" margin-top: 5vh;">
+                    <h1>У вас пока нет предстоящих поездок</h1>
+                    <p>Чтобы найти билеты на автобус выберите направление, дату поездки и количество пассажиров</p>
+                </div>
+            </div>
+        {% else %}
+        <div class="spisok">
+            <div class="tickets_sel">
+                {% for route in tickets %}
+                <div class="route_block">
+                    <div class="race_inf">
+                        <div class="route_time_inf">
+                            <div class="departure_time">
+                                <p>{{ route.schedule.route.departure_time|time }}</p>
+
+                            </div>
+                            <div class="duration">
+                                <p>{{ route.schedule.route.duration }} часов в пути</p>
+                            </div>
+                            <div class="arrival_time">
+                                <p>{{ route.schedule.route.arrival_time.time|time  }}</p>
+                            </div>
+                        </div>
+                        <div class="date_inf">
+                            <div class="departure_date">
+                                <p>{{ route.schedule.route.departure_time.date }}</p>
+                            </div>
+                            <div class="distance">
+                                <p>Расстояние {{ route.schedule.route.distance }} км</p>
+                            </div>
+                            <div class="arrival_date">
+                                <p>{{ route.schedule.route.arrival_time.date }}</p>
+                            </div>
+                        </div>
+                        <div class="address_block">
+                            <div class="origin_address">
+                                <p>{{ route.schedule.route.origin }}</p>
+                                <div class="address">
+                                    {{ route.schedule.route.origin_address }}
+                                </div>
+                            </div>
+                            <div></div>
+                            <div class="line">
+                                <div class="square"></div>
+                                <div class="red_line"></div>
+                                <div class="strela"></div>
+                            </div>
+                            <div class="arrival_address">
+                                <p>{{ route.schedule.route.destination }}</p>
+                                <div class="address">
+                                    <p>{{ route.schedule.route.destination_address }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block_check">
+                            <div class="bus_info">
+                                <div class="brand_name">
+                                    <p>Автобус - {{ route.schedule.bus.brand }}</p>
+                                </div>
+                                <div class="available_seats">
+                                    <p>Номер места в автобусе {{ route.sel_seat.seat_number }}</p>
+                                </div>
+                                <div class="buy_block">
+                                    <div class="price">
+                                        <p>Цена - {{ route.schedule.price|spacecomma }} руб</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="button">
+                            <a href="{% url 'delete_ticket' route.id %}">Удалить</a>
+                        </div>
+                        
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

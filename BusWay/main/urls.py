@@ -9,5 +9,7 @@ urlpatterns = [
     path('auth/', auth, name="auth"),
     path('sign_up/', sign_up, name="sign_up"),
     path('save_ticket/', save_ticket, name="save_ticket"),
+    path('profile_view/', profile_view, name="profile_view"),
     path('bus_layout/<int:schedule_id>/', bus_layout, name='bus_layout'),
+    path('delete_ticket/<int:ticket_id>/', delete_ticket, name='delete_ticket'),
 ]

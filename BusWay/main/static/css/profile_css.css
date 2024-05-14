@@ -1,0 +1,58 @@
+.links p{
+    color: black;
+}
+.logo p{
+    color: rgb(114, 114, 114);
+}
+
+
+.block_profile_info{
+    display: flex;
+    height: 30vh;
+    box-shadow: 0 0px 3px rgba(0, 0, 0, 0.5);
+}
+.blocks_info{
+    padding: 15vh;
+}
+.name_block, .last_name_block, .email_block, .number_phone_block, .date_of_birthday_block {
+    padding-left: 5vh;
+    padding-right: 5vh;
+    height: 7vh;
+    border: solid 0.2vh rgb(114, 114, 114);
+    border-radius: 1vh;
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+}
+.name_block p, .last_name_block p, .email_block p, .number_phone_block p, .date_of_birthday_block p{
+    font-family: Inter;
+    font-size: 1.1vw;
+    text-align: center;
+}
+.blocks_info{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3vh;
+}
+.tickets{
+   
+    background-color: rgb(245,245,245);
+    margin-top: 0.4vh;
+}
+.title_tickets{
+    display: flex;
+    justify-content: center;
+    
+}
+.title_tickets h1, p{
+    font-family: Inter;
+    font-weight: 400;
+}
+.spisok{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.tickets_sel{
+    margin-top: 10vh;
+}

@@ -16,8 +16,8 @@
         </a>
         <div class="links">
             {% if request.user.is_authenticated %}
-                <a class="profile_link" href="{% url 'main_page' %}">
-                    {% if title == 'Выбор места' or title == 'Оформление билета' %}
+                <a class="profile_link" href="{% url 'profile_view' %}">
+                    {% if title == 'Выбор места' or title == 'Оформление билета' or title == 'Профиль'%}
                         <img src="{% static 'images/profile_icon_green.png' %}" alt="profile">
                     {% else %}
                         <img src="{% static 'images/profile_icon.png' %}" alt="profile">
