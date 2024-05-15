@@ -38,11 +38,12 @@
    
     background-color: rgb(245,245,245);
     margin-top: 0.4vh;
+    
 }
 .title_tickets{
     display: flex;
     justify-content: center;
-    
+
 }
 .title_tickets h1, p{
     font-family: Inter;

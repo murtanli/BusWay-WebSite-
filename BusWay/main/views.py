@@ -104,12 +104,13 @@ def search_routes(request):
 def bus_layout(request, schedule_id):
     schedule = Schedule.objects.get(pk=schedule_id)
     bus = get_object_or_404(Bus, pk=schedule.bus.id)
-    bus_seats = BusSeat.objects.filter(bus=bus)
+    bus_seats = BusSeat.objects.filter(schedule=schedule)
     title = 'Выбор места'
 
     # for i in range(bus.total_seats):
-    #     seat = BusSeat.objects.create(bus=bus,seat_number=i)
+    #     seat = BusSeat.objects.create(bus=bus, schedule=schedule,seat_number=i)
     #     seat.save()
+
     column_one = []
     column_two = []
     column_three = []
@@ -118,16 +119,16 @@ def bus_layout(request, schedule_id):
     # Распределяем номера мест по столбцам
     for index, seat in enumerate(bus_seats):
         if index % 4 == 0:
-            seat_num = BusSeat.objects.get(bus=bus, seat_number=seat.seat_number)
+            seat_num = BusSeat.objects.get(bus=bus,schedule=schedule, seat_number=seat.seat_number)
             column_one.append(seat_num)
         elif index % 4 == 1:
-            seat_num = BusSeat.objects.get(bus=bus, seat_number=seat.seat_number)
+            seat_num = BusSeat.objects.get(bus=bus,schedule=schedule, seat_number=seat.seat_number)
             column_two.append(seat_num)
         elif index % 4 == 2:
-            seat_num = BusSeat.objects.get(bus=bus, seat_number=seat.seat_number)
+            seat_num = BusSeat.objects.get(bus=bus,schedule=schedule, seat_number=seat.seat_number)
             column_three.append(seat_num)
         elif index % 4 == 3:
-            seat_num = BusSeat.objects.get(bus=bus, seat_number=seat.seat_number)
+            seat_num = BusSeat.objects.get(bus=bus,schedule=schedule, seat_number=seat.seat_number)
             column_four.append(seat_num)
     context = {
         'schedule': schedule,
@@ -150,9 +151,25 @@ def create_ticket(request):
         schedule_id = request.POST.get('schedule_id')
         seat_number = request.POST.get('selected_seat')
 
+        profile = Profile.objects.get(user_id=request.user)
+
+        try:
+            snils = profile.snils
+            email = profile.email
+            date_of_birth = profile.date_of_birthday.strftime('%Y-%m-%d')
+
+            user_info = {
+                'snils': snils,
+                'email': email,
+                'date_of_birthday': date_of_birth
+            }
+        except:
+            user_info = {}
+
         schedule = Schedule.objects.get(id=schedule_id)
         route = schedule.route
         context = {
+            'user_info': user_info,
             'title': title,
             'schedule': schedule,
             'route': route,
@@ -168,8 +185,7 @@ def save_ticket(request):
         schedule_id = request.POST.get('schedule_id')
         seat_number = request.POST.get('seat_number')
 
-        last_name = request.POST.get('last_name')
-        first_name = request.POST.get('first_name')
+        snils = request.POST.get('snils')
         date_of_birthday = request.POST.get('date_of_birthday')
         number_phone = request.POST.get('number_phone')
         email = request.POST.get('email')
@@ -177,10 +193,8 @@ def save_ticket(request):
         user = get_object_or_404(User, id=request.user.id)
         profile = get_object_or_404(Profile, user_id=user.id)
 
-        profile.first_name = first_name
-        profile.last_name = last_name
+        profile.snils = snils
         profile.date_of_birthday = date_of_birthday
-        profile.number_phone = number_phone
         profile.email = email
         profile.save()
 
@@ -189,7 +203,7 @@ def save_ticket(request):
         schedule.available_seats = avalible_seats - 1
         schedule.save()
 
-        seat_number = BusSeat.objects.get(bus=schedule.bus, seat_number=seat_number)
+        seat_number = BusSeat.objects.get(bus=schedule.bus,schedule=schedule, seat_number=seat_number)
         seat_number.is_occuiped = True
         seat_number.save()
 

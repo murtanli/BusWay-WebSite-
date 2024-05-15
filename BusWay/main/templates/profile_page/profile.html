@@ -10,16 +10,10 @@
 <div class="block_profile_info">
     <div class="blocks_info">
         <div class="name_block">
-            <p>Имя: {{ profile.first_name }}</p>
-        </div>
-        <div class="last_name_block">
-            <p>Фамилия: {{ profile.last_name }}</p>
+            <p>Снилс: {{ profile.snils }}</p>
         </div>
         <div class="email_block">
             <p>Email: {{ profile.email }}</p>
-        </div>
-        <div class="number_phone_block">
-            <p>Номер телефона: {{ profile.number_phone }}</p>
         </div>
         <div class="date_of_birthday_block">
             <p>Дата рождения: {{ profile.date_of_birthday }}</p>
@@ -30,7 +24,7 @@
     <div class="tickets_block_info">
         {% if not tickets %}
             <div class="title_tickets">
-                <div style=" margin-top: 5vh;">
+                <div style=" margin-top: 5vh;margin-bottom: 50vh;">
                     <h1>У вас пока нет предстоящих поездок</h1>
                     <p>Чтобы найти билеты на автобус выберите направление, дату поездки и количество пассажиров</p>
                 </div>

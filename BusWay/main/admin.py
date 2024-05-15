@@ -1,10 +1,13 @@
 from django.contrib import admin
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 from .models import *
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('pk','first_name', 'last_name', 'email', 'date_of_birthday', 'number_phone', 'user_login')
-    list_display_links = ('user_login',)
+    list_display = ('pk', 'snils', 'email', 'date_of_birthday', 'user_login')
+    list_display_links = ('pk', 'user_login',)
 
     def user_login(self, obj):
         return obj.user_id.username
@@ -17,8 +20,8 @@ class BusAdmin(admin.ModelAdmin):
 
 @admin.register(BusSeat)
 class BusSeatAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'seat_number', 'is_occuiped', 'bus_license_plate')
-    list_display_links = ('bus_license_plate',)
+    list_display = ('pk','schedule', 'seat_number', 'is_occuiped', 'bus_license_plate')
+    list_display_links = ('pk', 'bus_license_plate',)
 
     def bus_license_plate(self, obj):
         return obj.bus.license_plate
@@ -43,6 +46,17 @@ class ScheduleAdmin(admin.ModelAdmin):
         return obj.bus.license_plate
 
     license_plate_bus.short_description = "License plate"
+@receiver(post_save, sender=Schedule)
+def create_bus_seats(sender, instance, created, **kwargs):
+    if created:
+        bus = instance.bus
+        total_seats = bus.total_seats
+        for seat_number in range(1, total_seats + 1):
+            BusSeat.objects.create(
+                bus=bus,
+                schedule=instance,
+                seat_number=seat_number
+            )
 
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):

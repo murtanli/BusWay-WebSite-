@@ -3,20 +3,16 @@ from django.db import models
 
 class Profile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=20, null=True, blank=True)
-    last_name = models.CharField(max_length=30 , null=True, blank=True)
+    snils = models.CharField(max_length=11, default="Empty")
+    # first_name = models.CharField(max_length=20, null=True, blank=True)
+    # last_name = models.CharField(max_length=30 , null=True, blank=True)
     email = models.EmailField(max_length=30, default="Empty", null=True, blank=True)
-    number_phone = models.CharField(max_length=11, default="Empty", null=True, blank=True)
+    # number_phone = models.CharField(max_length=11, default="Empty", null=True, blank=True)
     date_of_birthday = models.DateField(null=True, blank=True)
 class Bus(models.Model):
     brand = models.CharField(max_length=100)
     total_seats = models.IntegerField()
     license_plate = models.CharField(max_length=9)
-
-class BusSeat(models.Model):
-    bus = models.ForeignKey(Bus, on_delete=models.CASCADE)
-    seat_number = models.IntegerField()
-    is_occuiped = models.BooleanField(default=False)
 
 class Route(models.Model):
     origin = models.CharField(max_length=30)
@@ -33,6 +29,14 @@ class Schedule(models.Model):
     bus = models.ForeignKey(Bus, on_delete=models.CASCADE)
     available_seats = models.IntegerField()
     price = models.IntegerField()
+
+class BusSeat(models.Model):
+    bus = models.ForeignKey(Bus, on_delete=models.CASCADE)
+    schedule = models.ForeignKey(Schedule, null=True, blank=True, on_delete=models.CASCADE)
+    seat_number = models.IntegerField()
+    is_occuiped = models.BooleanField(default=False)
+
+
 
 class Ticket(models.Model):
     status = (

@@ -28,27 +28,17 @@
             <div>
                 <div class="user_form_form">
                     <div class="input_block">
-                        <label for="last_name">Фамилия</label>
-                        <input id="last_name" type="text" name="last_name" placeholder="Иванов">
-                    </div>
-                    <div class="input_block">
-                        <label for="first_name">Имя</label>
-                        <input id="first_name" type="text" name="first_name" placeholder="Иван">
+                        <label for="snils">Снилс</label>
+                        <input id="snils" type="text" maxlength="14"  name="snils" placeholder="123-123-123 12" value="{{ user_info.snils }}">
                     </div>
                     <div class="input_block">
                         <label for="date_of_birthday">Дата рождения</label>
-                        <input id="date_of_birthday" type="date" name="date_of_birthday" placeholder="дд.мм.гггг">
-                    </div>
-                    <div class="input_block">
-                        <label for="number_phone">Номер телефона</label>
-                        <input  id="num_phone" type="tel" name="number_phone" placeholder=" 7 ___ ___-__-__">
-                        <span class="plus">+</span>
+                        <input id="date_of_birthday" type="date" name="date_of_birthday" placeholder="дд.мм.гггг" value='{{ user_info.date_of_birthday}}'>
                     </div>
                     <div class="input_block">
                         <label for="email">E-mail</label>
-                        <input id="email" type="email" name="email" placeholder="example@mail.ru">
+                        <input id="email" type="email" name="email" placeholder="example@mail.ru" value="{{ user_info.email }}">
                     </div>
-                   
                 </div> 
                 <div class="seat_number_block">
                     <h1>Место в автобусе</h1>
@@ -120,28 +110,24 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        var num_phone_input = document.querySelector('#num_phone');
-        var plus = document.querySelector('.plus');
-
-        num_phone_input.addEventListener('focus', (event) => {
-            // Удаляем класс '.plus' у элемента plus
-            plus.classList.remove('plus');
-            plus.classList.add('plus_rem');
-            // Устанавливаем значение поля ввода на "+7", когда фокус получен
-            num_phone_input.value = "+7";
-        });
-
-        num_phone_input.addEventListener('blur', (event) => {
-            // Добавляем класс '.plus' обратно элементу plus, если поле ввода теряет фокус
-            plus.classList.add('plus');
-            plus.classList.remove('plus_rem');
-            // Если поле ввода пустое, возвращаем его к исходному значению "+7"
-            if (num_phone_input.value.trim() === "") {
-                num_phone_input.value = "";
-                num_phone_input.placeholder = " 7 ___ ___-__-__"
+        var snils_input = document.querySelector('#snils');
+        var num = 0;
+    
+        snils_input.addEventListener('input', (event) => {
+            var text = snils_input.value.trim(); // Получаем текущее значение поля без пробелов по краям
+    
+            if (text.length === 3 || text.length === 7 ) {
+                snils_input.value = text + '-';
+            }
+    
+            // Проверяем на количество символов, чтобы избежать зацикливания
+            if (text.length === 11) {
+                num = 0; 
+                snils_input.value = text + ' ';
             }
         });
     });
+    
     function check() {
         const form = document.querySelector('.user_form_form');
         const last_name = form.querySelector('#last_name');

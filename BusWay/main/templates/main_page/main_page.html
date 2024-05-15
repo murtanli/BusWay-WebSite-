@@ -120,17 +120,20 @@
                                             <p>Автобус - {{ route.bus.brand }}</p>
                                         </div>
                                         <div class="available_seats">
-                                            {% if route.schedule.available_seats < 2 %}
-                                            <p style="color: red;">Осталось {{ route.schedule.available_seats }} место</p>
+                                            {% if route.schedule.available_seats != 0 %}
+                                                {% if route.schedule.available_seats < 6 %}
+                                                    <p style="color: red;">Осталось {{ route.schedule.available_seats }} место</p>
+                                                {% else %}
+                                                    <p style="color: green;">Больше {{ route.schedule.available_seats }} мест</p>
+                                                {% endif %}
                                             {% else %}
-                                                <p style="color: green;">Больше {{ route.schedule.available_seats }} мест</p>
+                                                <p style="color: red;">Мест нет</p>
                                             {% endif %}
                                         </div>
                                         <div class="buy_block">
                                             <div class="price">
                                                 <p>Цена - {{ route.schedule.price|spacecomma }} руб</p>
                                             </div>
-                                        
                                         </div>
                                     </div>
                                 </div>
