@@ -42,10 +42,12 @@
                 </div> 
                 <div class="seat_number_block">
                     <h1>Место в автобусе</h1>
-                    <div class="seat_number_view">
-                        <img src="{% static 'images/seat.png' %}" alt="">
-                        <p> Место: {{ seat_number }}</p>
-                    </div>
+                    {% for seat in seat_number %}
+                        <div class="seat_number_view">
+                            <img src="{% static 'images/seat.png' %}" alt="">
+                            <p> Место: {{ seat }}</p>
+                        </div>
+                    {% endfor %}
                 </div>
                 <div class="save_button_block">
                     <button type="submit">Сохранить</button>

@@ -104,7 +104,10 @@
 .seat_number_block{
     width: 30vh;
     height: 10vh;
-    margin-top: 5vh;
+    /* margin-top: 5vh; */
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
 }
 .seat_number_view{
     display: flex;
@@ -147,7 +150,7 @@
 }
 .save_button_block{
     width: 100%;
-    margin-top: 5vh;
+    margin-top: 17vh;
 }
 .save_button_block button{
     width: 100%;

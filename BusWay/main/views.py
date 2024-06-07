@@ -1,3 +1,4 @@
+import ast
 import calendar
 import datetime
 import locale
@@ -149,7 +150,8 @@ def create_ticket(request):
 
     if request.method == 'POST':
         schedule_id = request.POST.get('schedule_id')
-        seat_number = request.POST.get('selected_seat')
+        seat_number = request.POST.getlist('selected_seats')
+
 
         profile = Profile.objects.get(user_id=request.user)
 
@@ -183,7 +185,8 @@ def create_ticket(request):
 def save_ticket(request):
     if request.method == 'POST':
         schedule_id = request.POST.get('schedule_id')
-        seat_number = request.POST.get('seat_number')
+        seat_number = request.POST.getlist('seat_number')
+
 
         snils = request.POST.get('snils')
         date_of_birthday = request.POST.get('date_of_birthday')
@@ -198,21 +201,25 @@ def save_ticket(request):
         profile.email = email
         profile.save()
 
-        schedule = Schedule.objects.get(id=schedule_id)
-        avalible_seats = schedule.available_seats
-        schedule.available_seats = avalible_seats - 1
-        schedule.save()
+        for i in seat_number:
+            seat = ast.literal_eval(i)
 
-        seat_number = BusSeat.objects.get(bus=schedule.bus,schedule=schedule, seat_number=seat_number)
-        seat_number.is_occuiped = True
-        seat_number.save()
+            for seat_num in seat:
+                schedule = Schedule.objects.get(id=schedule_id)
+                avalible_seats = schedule.available_seats
+                schedule.available_seats = avalible_seats - 1
+                schedule.save()
 
-        Ticket.objects.create(
-            profile=profile,
-            schedule=schedule,
-            sel_seat=seat_number,
-            ticket_status='Забронировано'
-        )
+                seat_number = BusSeat.objects.get(bus=schedule.bus,schedule=schedule, seat_number=int(seat_num))
+                seat_number.is_occuiped = True
+                seat_number.save()
+
+                Ticket.objects.create(
+                    profile=profile,
+                    schedule=schedule,
+                    sel_seat=seat_number,
+                    ticket_status='Забронировано'
+                )
 
         return redirect('main_page')
     return HttpResponseNotFound(render(request, 'notfound.html'))

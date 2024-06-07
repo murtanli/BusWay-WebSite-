@@ -100,7 +100,7 @@
                                                 {% if route.schedule.available_seats < 6 %}
                                                     <p style="color: red;">Осталось {{ route.schedule.available_seats }} мест</p>
                                                 {% else %}
-                                                    <p style="color: green;">Больше {{ route.schedule.available_seats }} мест</p>
+                                                    <p style="color: green;">{{ route.schedule.available_seats }} мест</p>
                                                 {% endif %}
                                             {% else %}
                                                 <p style="color: red;">Мест нет</p>
